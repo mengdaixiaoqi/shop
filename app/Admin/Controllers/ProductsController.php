@@ -24,6 +24,30 @@ class ProductsController extends AdminController
             ->header('商品列表')
             ->body($this->grid());
     }
+
+    //创建
+    public function create(Content $content){
+        return $content
+            ->header('创建商品')
+            ->body($this->form());
+    }
+
+    //创建
+    public function store(){
+        return $this->form()->store();
+    }
+
+    //修改
+    public function edit($id,Content $content){
+        return $content
+            ->header( '编辑商品')
+            ->body($this->form()->edit($id));
+    }
+
+    public function update($id){
+
+        return $this->form()->update($id);
+    }
     /**
      * Make a grid builder.
      *
@@ -34,16 +58,16 @@ class ProductsController extends AdminController
         $grid = new Grid(new Product);
 
         $grid->column('id', __('Id'))->sortable();
-        $grid->column('title', __('Title'));
-        $grid->column('description', __('Description'));
-        $grid->column('image', __('Image'));
-        $grid->column('on_sale', __('On sale'))->display(function ($value) {
+        $grid->column('title', '商品名称');
+        //$grid->column('description', __('Description'));
+        //$grid->column('image', __('Image'));
+        $grid->column('on_sale', '已上架')->display(function ($value) {
             return $value ? '是' : '否';
         });
-        $grid->column('price', __('Price'));
-        $grid->column('rating', __('Rating'));
-        $grid->column('sold_count', __('Sold count'));
-        $grid->column('review_count', __('Review count'));
+        $grid->column('price', '价格');
+        $grid->column('rating', '评分');
+        $grid->column('sold_count', '销量');
+        $grid->column('review_count', '评论数');
 
         $grid->actions(function ($actions) {
             $actions->disableView();
@@ -92,16 +116,33 @@ class ProductsController extends AdminController
      */
     protected function form()
     {
+        // 创建一个表单
         $form = new Form(new Product);
 
-        $form->text('title', __('Title'));
-        $form->textarea('description', __('Description'));
-        $form->image('image', __('Image'));
-        $form->switch('on_sale', __('On sale'))->default(1);
-        $form->decimal('rating', __('Rating'))->default(5.00);
-        $form->number('sold_count', __('Sold count'));
-        $form->number('review_count', __('Review count'));
-        $form->decimal('price', __('Price'));
+        // 创建一个输入框，第一个参数 title 是模型的字段名，第二个参数是该字段描述
+        $form->text('title', __('Title'))->rules('required');
+
+        // 创建一个选择图片的框
+        $form->image('image', __('Image'))->rules('required|image');
+
+        // 创建一个富文本编辑器
+        $form->editor('description', __('Description'))->rules('required');
+
+        // 创建一组单选框
+        $form->radio('on_sale', __('On sale'))->options(['1' => '是', '0'=> '否'])->default(0);
+
+        // 直接添加一对多的关联模型
+        $form->hasMany('skus', 'SKU 列表', function (Form\NestedForm $form) {
+            $form->text('title', 'SKU 名称')->rules('required');
+            $form->text('description', 'SKU 描述')->rules('required');
+            $form->text('price', '单价')->rules('required|numeric|min:0.01');
+            $form->text('stock', '剩余库存')->rules('required|integer|min:0');
+        });
+
+        // 定义事件回调，当模型即将保存时会触发这个回调
+        $form->saving(function (Form $form) {
+            $form->model()->price = collect($form->input('skus'))->where(Form::REMOVE_FLAG_NAME, 0)->min('price') ?: 0;
+        });
 
         return $form;
     }
