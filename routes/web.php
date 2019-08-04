@@ -13,6 +13,7 @@
 
 Route::redirect('/', '/products')->name('root');
 Route::get('products', 'ProductsController@index')->name('products.index');
+Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 //Route::get('/', 'PagesController@root')->name('root');
 
 Auth::routes(['verify' => true]);
@@ -34,6 +35,6 @@ Route::group(['middleware'=>'auth'],function(){
 
 
     });
-    Route::get('products/{product}', 'ProductsController@show')->name('products.show');
+
     // 结束
 });
