@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Shanghai',
 
     /*
     |--------------------------------------------------------------------------
@@ -227,5 +227,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
     ],
+
+    //未支付关闭订单  时间
+    'order_ttl' => 30,
 
 ];
