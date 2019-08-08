@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\OrderService;
 use App\Http\Requests\OrderRequest;
+use Illuminate\Http\Request;
 use App\Models\ProductSku;
 use App\Models\UserAddress;
 use App\Models\Order;
