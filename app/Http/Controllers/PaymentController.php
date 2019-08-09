@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderPaid;
 use Endroid\QrCode\QrCode;
 use App\Models\Order;
 use App\Exceptions\InvalidRequestException;
@@ -9,6 +10,11 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    protected function afterPaid(Order $order)
+    {
+        event(new OrderPaid($order));
+    }
+
     public function payByAlipay(Order $order, Request $request){
         // 判断订单是否属于当前用户
         $this->authorize('own', $order);
@@ -59,6 +65,8 @@ class PaymentController extends Controller
             'payment_no'     => $data->trade_no, // 支付宝订单号
         ]);
 
+        $this->afterPaid($order);
+
         return app('alipay')->success();
     }
 
@@ -76,7 +84,7 @@ class PaymentController extends Controller
             'body'      => '支付 Laravel Shop 的订单：'.$order->no, // 订单描述
         ]);
 
-        / 把要转换的字符串作为 QrCode 的构造函数参数
+        // 把要转换的字符串作为 QrCode 的构造函数参数
         $qrCode = new QrCode($wechatOrder->code_url);
 
         // 将生成的二维码图片数据以字符串形式输出，并带上相应的响应类型
@@ -105,6 +113,8 @@ class PaymentController extends Controller
             'payment_method' => 'wechat',
             'payment_no'     => $data->transaction_id,
         ]);
+
+        $this->afterPaid($order);
 
         return app('wechat_pay')->success();
     }

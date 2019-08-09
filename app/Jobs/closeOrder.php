@@ -47,7 +47,8 @@ class closeOrder implements ShouldQueue
             $this->order->update(['closed'=>true]);
             //循环遍历订单中的商品，sku,将订单中的数量加回到 SKU 的库存中去
             foreach($this->order->items as $item){
-                $this->productSku->addStock($item->amount);
+                //dd($this->productSku);
+                $item->productSku->addStock($item->amount);
             }
         });
     }
