@@ -23,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
             UpdateProductSoldCount::class,
             SendOrderPaidMail::class,
         ],
+        OrderReviewd::class => [
+            UpdateProductRating::class,
+        ],
     ];
 
     /**
