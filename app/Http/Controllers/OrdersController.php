@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use App\Models\OrderItem;
 use App\Events\OrderReviewd;
 use Carbon\Carbon;
 use App\Http\Requests\SendReviewRequest;
@@ -94,9 +96,8 @@ class OrdersController extends Controller
                 ]);
             }
             // 将订单标记为已评价
-            $order->update(['reviewed' => true]);
+            $order->update(['reviewed' => true]);dd(new OrderReviewd($order));
             event( new OrderReviewd($order));
-            dd($order);
         });
 
         return redirect()->back();
