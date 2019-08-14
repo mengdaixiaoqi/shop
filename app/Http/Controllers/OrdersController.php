@@ -83,7 +83,7 @@ class OrdersController extends Controller
         $reviews = $request->input('reviews');
         //开启事务
         \DB::transaction(function() use ($reviews, $order){
-            //遍历用户提交的数据
+            //遍历用户提交的数dd($order);
             foreach ($reviews as $review) {
                 $orderItem = $order->items()->find($review['id']);
                 // 保存评分和评价
@@ -96,6 +96,7 @@ class OrdersController extends Controller
             // 将订单标记为已评价
             $order->update(['reviewed' => true]);
             event( new OrderReviewd($order));
+            dd($order);
         });
 
         return redirect()->back();
