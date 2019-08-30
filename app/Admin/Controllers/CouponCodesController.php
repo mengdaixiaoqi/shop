@@ -24,6 +24,21 @@ class CouponCodesController extends AdminController
             ->header('优惠卷列表')
             ->body($this->grid());
     }
+
+    public function create(Content $content)
+    {
+        return $content
+            ->header('新增优惠券')
+            ->body($this->form());
+    }
+
+    public function edit($id,Content $content)
+    {
+        return $content
+            ->header('编辑优惠券')
+            ->body($this->form()->edit($id));
+    }
+
     /**
      * Make a grid builder.
      *
@@ -95,16 +110,40 @@ class CouponCodesController extends AdminController
     {
         $form = new Form(new CouponCode);
 
-        $form->text('name', __('Name'));
-        $form->text('code', __('Code'));
-        $form->text('type', __('Type'));
-        $form->decimal('value', __('Value'));
-        $form->number('total', __('Total'));
-        $form->number('used', __('Used'));
-        $form->decimal('min_amount', __('Min amount'));
-        $form->datetime('not_before', __('Not before'))->default(date('Y-m-d H:i:s'));
-        $form->datetime('not_after', __('Not after'))->default(date('Y-m-d H:i:s'));
-        $form->switch('enabled', __('Enabled'));
+        $form->display('id','ID');
+        $form->text('name', '名称')->rules('required');
+        $form->text('code', '优惠码')->rules(function ($form) {
+            //如果$form->model()->id不为空，代表是编辑操作
+            if($id = $form->model()->id) {
+                return 'nullable|unique:coupon_codes,code,'.$id.',id';
+            } else {
+                return 'nullable|unique:coupon_codes';
+            }
+        });
+        $form->radio('type', '类型')->options(CouponCode::$typeMap)->rules('required');
+        $form->text('value', '折扣')->rules(function ($form){
+            if($form->type === CouponCode::TYPE_PERCENT){
+                // 如果选择了百分比折扣类型，那么折扣范围只能是 1 ~ 99
+                return 'required|numeric|between:1,99';
+            } else {
+                // 否则只要大等于 0.01 即可
+                return 'required|numeric|min:0.01';
+            }
+        });
+        $form->number('total', '总量')->rules('required|numeric|min:1')->default(1);
+        $form->currency('min_amount', '最低金额')->rules('required|numeric|min:0.01')->symbol('￥');;
+        $form->datetime('not_before', '开始时间')->default(date('Y-m-d H:i:s'));
+        $form->datetime('not_after', '结束时间')->default(date('Y-m-d H:i:s'));
+        $form->switch('enabled', '启动')->options( [
+            'on'  => ['value' => 1, 'text' => '是', 'color' => 'success'],
+            'off' => ['value' => 0, 'text' => '否', 'color' => 'danger'],
+        ]);
+
+        $form->saving(function (Form $form){
+           if(!$form->code){
+               $form->code = CouponCode::findAvailableCode();
+           }
+        });
 
         return $form;
     }
