@@ -53,6 +53,7 @@ Route::group(['middleware'=>'auth'],function(){
         Route::get('payment/{order}/wechat', 'PaymentController@payByWechat')->name('payment.wechat');
         Route::post('orders/{order}/apply_refund', 'OrdersController@applyRefund')->name('orders.apply_refund');
 
+        Route::get('coupon_codes/{code}', 'CouponCodesController@show')->name('coupon_codes.show');
     });
     Route::get('products/{product}', 'ProductsController@show')->name('products.show');
     // 结束
