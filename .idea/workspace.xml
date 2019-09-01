@@ -3,7 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="92924349-a74f-420f-abe9-542ad140af49" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CouponCodesController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CouponCodesController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/OrdersController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/OrdersController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Jobs/closeOrder.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Jobs/closeOrder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/CouponCode.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/CouponCode.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/CartService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/CartService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Services/OrderService.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Services/OrderService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/cart/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/cart/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/orders/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/orders/show.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -195,7 +203,7 @@
       <workItem from="1566995492524" duration="8276000" />
       <workItem from="1567085523889" duration="1004000" />
       <workItem from="1567087311342" duration="2556000" />
-      <workItem from="1567172961961" duration="9117000" />
+      <workItem from="1567172961961" duration="19845000" />
     </task>
     <servers />
   </component>

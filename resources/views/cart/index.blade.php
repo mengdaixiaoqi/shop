@@ -166,6 +166,10 @@ $(document).ready(function () {
         });
         axios.post('{{ route('orders.store') }}', req)
         .then(function (response) {
+            console.log(response);
+            // if(response.){
+            //
+            // }
             swal('订单提交成功', '', 'success')
             .then(() => {
                 location.href = '/orders/' + response.data.id;
